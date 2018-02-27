@@ -9,6 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "csv-parse": "^2.0.4"
+    "async": "^2.6.0",
+    "csv-parse": "^2.0.4",
+    "lodash": "^4.17.5",
+    "require-csv": "0.0.1"
   }
 }
