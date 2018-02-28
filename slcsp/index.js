@@ -4,12 +4,13 @@ const async = require('async')
 const _ = require('lodash')
 require('require-csv')
 const plans = require('./csv_files/plans.csv')
+const zips = require('./csv_files/zips.csv')
+const slcspZips = require('./csv_files/slcsp.csv')
 const stateCodes = require('./states').states
 
-const findSLCSPByZip = function() {
-    let statePlans = buildStatePlans()
-    let all
-}
+let statePlans
+let allZips
+let slcsp
 
 const buildStatePlans = () => {
     const headers = plans[0]
@@ -37,6 +38,51 @@ const buildStatePlans = () => {
     return states
 }
 
-const buildZips = () => {}
+const buildZips = () => {
+    const headers = zips[0]
+    zips.splice(0, 1) // remove the header line
+    return zips.map(row => {
+        return _.zipObject(headers, row)
+    })
+}
 
-findSLCSPByZip()
+const buildSLCSP = () => {
+    const headers = slcspZips[0]
+    slcspZips.splice(0, 1) // remove the header line
+    return slcspZips.map(row => {
+        return _.zipObject(headers, row)
+    })
+}
+
+const findSlcspByZip = zipRate => {
+    let findZips = allZips.filter(zip => {
+        return zip.zipcode == zipRate.zipcode
+    })
+    if (findZips.length === 1) {
+        let foundZip = findZips[0]
+        // console.log(foundZip)
+        if (statePlans[foundZip.state][foundZip.rate_area]) {
+            let sortedPlans = _.chain(statePlans[foundZip.state][foundZip.rate_area].Silver)
+                .sortBy('rate')
+                .uniqBy('rate')
+                .value()
+            return sortedPlans[1].rate
+        }
+    } else {
+    }
+    // console.log(findZips.length)
+}
+
+const processSlcspCsv = () => {
+    //initialize the data
+    statePlans = buildStatePlans()
+    allZips = buildZips()
+    slcsp = buildSLCSP()
+    let newDoc = []
+    slcsp.forEach(zipRate => {
+        newDoc.push({ zipcode: zipRate.zipcode, rate: findSlcspByZip(zipRate) })
+    })
+    console.log(newDoc)
+}
+
+processSlcspCsv()
