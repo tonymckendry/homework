@@ -3,6 +3,8 @@ const parse = require('csv-parse')
 const async = require('async')
 const _ = require('lodash')
 require('require-csv')
+const json2csv = require('json2csv').Parser
+
 const plans = require('./csv_files/plans.csv')
 const zips = require('./csv_files/zips.csv')
 const slcspZips = require('./csv_files/slcsp.csv')
@@ -86,7 +88,16 @@ const processSlcspCsv = () => {
     slcsp.forEach(zipRate => {
         newDoc.push({ zipcode: zipRate.zipcode, rate: findSlcspByZip(zipRate) })
     })
-    console.log(newDoc)
+    const json2csvParser = new json2csv({ fields: ['zipcode', 'rate'], quote: '' })
+    const csv = json2csvParser.parse(newDoc)
+
+    fs.writeFile('csv_files/output.csv', csv, 'utf8', function(err) {
+        if (err) {
+            console.log('Some error occured - file either not saved or corrupted file saved.')
+        } else {
+            console.log('File saved!')
+        }
+    })
 }
 
 processSlcspCsv()

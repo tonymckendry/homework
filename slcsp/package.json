@@ -11,6 +11,8 @@
   "dependencies": {
     "async": "^2.6.0",
     "csv-parse": "^2.0.4",
+    "fs": "0.0.1-security",
+    "json2csv": "^4.0.0",
     "lodash": "^4.17.5",
     "require-csv": "0.0.1"
   }
