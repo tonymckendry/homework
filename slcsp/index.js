@@ -55,12 +55,9 @@ const buildSLCSP = () => {
 }
 
 const findSlcspByZip = zipRate => {
-    let findZips = allZips.filter(zip => {
-        return zip.zipcode == zipRate.zipcode
-    })
+    let findZips = allZips.filter(zip => zip.zipcode == zipRate.zipcode)
     if (findZips.length === 1) {
         let foundZip = findZips[0]
-        // console.log(foundZip)
         if (statePlans[foundZip.state][foundZip.rate_area]) {
             let sortedPlans = _.chain(statePlans[foundZip.state][foundZip.rate_area].Silver)
                 .sortBy('rate')
@@ -69,8 +66,15 @@ const findSlcspByZip = zipRate => {
             return sortedPlans[1].rate
         }
     } else {
+        let initialRateArea = findZips[0].rate_area
+        if (findZips.filter(zip => zip.rate_area === initialRateArea).length === findZips.length) {
+            let sortedPlans = _.chain(statePlans[findZips[0].state][initialRateArea].Silver)
+                .sortBy('rate')
+                .uniqBy('rate')
+                .value()
+            return sortedPlans[1].rate
+        }
     }
-    // console.log(findZips.length)
 }
 
 const processSlcspCsv = () => {
