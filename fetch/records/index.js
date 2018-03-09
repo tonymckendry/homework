@@ -512,7 +512,6 @@ app.use(function(req, res, next) {
 })
 
 app.get('/records', function(req, res) {
-    console.log('hit records^^^^^^^^^^^^^^^^^^')
     var limit = parseInt(req.query.limit) || 100
     var offset = parseInt(req.query.offset) || 0
     var colorFilters = req.query.color

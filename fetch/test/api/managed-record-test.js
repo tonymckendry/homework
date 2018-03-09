@@ -25,7 +25,7 @@ describe('Records', function() {
     })
 
     describe('should return results for', function() {
-        xit('first page', function(done) {
+        it('first page', function(done) {
             var expected = {
                 previousPage: null,
                 nextPage: 2,
@@ -45,7 +45,7 @@ describe('Records', function() {
                 })
                 .then(done)
         })
-        xit('third page', function(done) {
+        it('third page', function(done) {
             var expected = {
                 previousPage: 2,
                 nextPage: 4,
@@ -64,7 +64,7 @@ describe('Records', function() {
                 })
                 .then(done)
         })
-        xit('fifteenth page with colors', function(done) {
+        it('fifteenth page wxith colors', function(done) {
             var expected = {
                 previousPage: 14,
                 nextPage: 16,
@@ -85,7 +85,7 @@ describe('Records', function() {
                 })
                 .then(done)
         })
-        xit('thirty fourth page', function(done) {
+        it('thirty fourth page', function(done) {
             var expected = {
                 previousPage: 33,
                 nextPage: 35,
@@ -106,7 +106,7 @@ describe('Records', function() {
                 })
                 .then(done)
         })
-        xit('last page', function(done) {
+        it('last page', function(done) {
             var expected = {
                 previousPage: 49,
                 nextPage: null,
@@ -122,7 +122,7 @@ describe('Records', function() {
         })
     })
 
-    xit('should return an empty set of results for pages after the last page', function(done) {
+    it('should return an empty set of results for pages after the last page', function(done) {
         var expected = { previousPage: 50, nextPage: null, ids: [], open: [], closedPrimaryCount: 0 }
         retrieve({ page: 51 })
             .then(function(output) {
@@ -131,7 +131,7 @@ describe('Records', function() {
             .then(done)
     })
 
-    xit('should return results filtered by multiple colors', function(done) {
+    it('should return results filtered by multiple colors', function(done) {
         var expected = {
             previousPage: null,
             nextPage: 2,
@@ -151,7 +151,7 @@ describe('Records', function() {
             .then(done)
     })
 
-    xit('should return results filtered by a single color', function(done) {
+    it('should return results filtered by a single color', function(done) {
         var expected = {
             previousPage: null,
             nextPage: 2,
@@ -170,7 +170,7 @@ describe('Records', function() {
             .then(done)
     })
 
-    xit('should return empty results', function(done) {
+    it('should return empty results', function(done) {
         var expected = { previousPage: null, nextPage: null, ids: [], open: [], closedPrimaryCount: 0 }
         retrieve({ colors: ['hotpink'] })
             .then(function(output) {
@@ -179,7 +179,7 @@ describe('Records', function() {
             .then(done)
     })
 
-    xit('should recover on fetch error', function(done) {
+    it('should recover on fetch error', function(done) {
         window.path = 'http://localhost:3000/recordszzz'
         spyOn(console, 'log').and.callFake(function() {})
 
