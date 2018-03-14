@@ -7,6 +7,9 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
+	"sort"
+	"io/ioutil"
 )
 
 const (
@@ -15,10 +18,46 @@ const (
 )
 
 func ChecksumMiddleware(h http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {		
 		// your code goes here ...
+		h.ServeHTTP(w,r)
+		s := ""
+		s += strconv.Itoa(http.StatusTeapot)
+		s += "\r\n"
+		var sortedHeaderKeys []string
+		for k:= range w.Header() {
+			sortedHeaderKeys = append(sortedHeaderKeys, k)
+		}
+		sort.Strings(sortedHeaderKeys)
+		for hh := range sortedHeaderKeys {
+			key:= sortedHeaderKeys[hh]
+			headerString := key 
+			headerString += ": "
+			headerString += strings.Join(w.Header()[key],"")
+			s += headerString
+			s += "\r\n"
+		}
+		s += "X-Checksum-Headers: "
+		for hh := range sortedHeaderKeys {
+			s += sortedHeaderKeys[hh]
+			s+= ";"
+		}
+		s += "\r\n\r\n"
+		responseData, err := ioutil.ReadAll(r.Body)
+        if err != nil {
+			fmt.Println("*************ERROR*************")
+            log.Fatal(err)
+		}
+		fmt.Println("responseData")
+		fmt.Println(string(responseData))
+		s+= string(responseData)
+
+		fmt.Println("s")
+		fmt.Println(s)
 	})
 }
+
+
 
 // Do not change this function.
 func main() {
