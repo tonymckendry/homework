@@ -1,14 +1,12 @@
-Write a checksum middleware
-===========================
+# Write a checksum middleware
 
 You have been asked to add a checksum to all outgoing HTTP responses, as
 a custom HTTP header.
 
-Task
-----
+## Task
 
 Write a HTTP handler function, which conforms to Go HTTP middleware conventions,
-that wraps an HTTP response and modifies it to add the checksum.  It should get
+that wraps an HTTP response and modifies it to add the checksum. It should get
 the response from the HTTP handler it wraps, compute a checksum, add the
 checksum as an HTTP header called `X-Checksum`, add a list of headers as
 `X-Checksum-Headers`, and send the response. The checksum is the SHA1 hash (hex
@@ -36,10 +34,9 @@ You must write Go code in the place indicated in `middleware.go`. There is a
 unit test included in the file `middleware_test.go`: you can run `go test`
 locally to try out your solution before submitting the answer.
 
-    Answer: <checksum string goes here>
+    Answer: 6f5e1db5b20078b13b709735799d09d48d
 
-Notes
------
+## Notes
 
 There are downloads and instructions for installing go at:
 
@@ -48,7 +45,7 @@ There are downloads and instructions for installing go at:
 This code should work with Go version 1.3 or greater. You can
 compile and run the `middleware.go` file by running:
 
-   go run middleware.go
+go run middleware.go
 
 from this directory. Make sure the `go` executable is in your path.
 
@@ -60,8 +57,8 @@ header and the body.
 
 If you are unfamiliar with writing middlewares in Go, read these blog posts:
 
-* http://www.alexedwards.net/blog/making-and-using-middleware
-* https://justinas.org/writing-http-middleware-in-go/
+*   http://www.alexedwards.net/blog/making-and-using-middleware
+*   https://justinas.org/writing-http-middleware-in-go/
 
 If you get an error message trying to run the server (`go run middleware.go`),
 like "listen tcp :8080: bind: address already in use", you can pass a flag to

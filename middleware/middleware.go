@@ -5,11 +5,15 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"strconv"
 	"strings"
 	"sort"
+	"io"
 	"io/ioutil"
+	"crypto/sha1"
+	"encoding/hex"
 )
 
 const (
@@ -20,12 +24,14 @@ const (
 func ChecksumMiddleware(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {		
 		// your code goes here ...
-		h.ServeHTTP(w,r)
+		war := httptest.NewRecorder()
+		h.ServeHTTP(war,r)
 		s := ""
 		s += strconv.Itoa(http.StatusTeapot)
+		w.WriteHeader(http.StatusTeapot)
 		s += "\r\n"
 		var sortedHeaderKeys []string
-		for k:= range w.Header() {
+		for k:= range war.Header() {
 			sortedHeaderKeys = append(sortedHeaderKeys, k)
 		}
 		sort.Strings(sortedHeaderKeys)
@@ -33,9 +39,10 @@ func ChecksumMiddleware(h http.Handler) http.Handler {
 			key:= sortedHeaderKeys[hh]
 			headerString := key 
 			headerString += ": "
-			headerString += strings.Join(w.Header()[key],"")
+			headerString += strings.Join(war.Header()[key],"")
 			s += headerString
 			s += "\r\n"
+			w.Header()[key] = war.Header()[key]
 		}
 		s += "X-Checksum-Headers: "
 		for hh := range sortedHeaderKeys {
@@ -43,17 +50,17 @@ func ChecksumMiddleware(h http.Handler) http.Handler {
 			s+= ";"
 		}
 		s += "\r\n\r\n"
-		responseData, err := ioutil.ReadAll(r.Body)
+		responseData, err := ioutil.ReadAll(war.Body)
         if err != nil {
-			fmt.Println("*************ERROR*************")
             log.Fatal(err)
 		}
-		fmt.Println("responseData")
-		fmt.Println(string(responseData))
 		s+= string(responseData)
 
-		fmt.Println("s")
-		fmt.Println(s)
+		w.Write(responseData)
+
+		checksum := sha1.New()
+		io.WriteString(checksum, s)
+		w.Header().Set("X-Checksum", hex.EncodeToString(checksum.Sum(nil)))
 	})
 }
 

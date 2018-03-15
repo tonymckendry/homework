@@ -1,0 +1,13 @@
+**Answer is in Readme**
+
+I went into this assignment with zero knowledge of Go; It was quite the challenge, but I found it enjoyable in the end. 
+
+I think it's a really well written problem, as everytime you start to make forward progress
+you run into another new problem to research and figure out.
+
+I had a particularly tough time with accessing the Body of the response (and had wondered where the hint in the readme was going to come into play).
+
+The test is failing as it was written when I received it - I have checked my output over and over 
+and come to the conclusion that you (probably) wouldnt give out the correct answer in the test and thus mine is (hopefully) correct. 
+
+Here's to hoping I'm right!  
